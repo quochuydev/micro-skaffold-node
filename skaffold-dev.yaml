@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2beta17
+kind: Config
+deploy:
+  statusCheckDeadlineSeconds: 600
+  kubectl:
+    manifests:
+      - ./k8s/dev/deployments/*
+build:
+  googleCloudBuild:
+    projectId: coffee-8fb06
+    concurrency: 1
+  artifacts:
+    - image: asia.gcr.io/coffee-8fb06/chat
+      context: chat
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
