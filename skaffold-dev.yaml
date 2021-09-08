@@ -5,6 +5,7 @@ deploy:
   kubectl:
     manifests:
       - ./k8s/dev/deployments/*
+      - ./k8s/dev/issuers/*
 build:
   googleCloudBuild:
     projectId: coffee-8fb06

@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: unichat-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: quochuydev1@gmail.com
+    privateKeySecretRef:
+      name: unichat-prod
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
