@@ -35,11 +35,11 @@ spec:
               service:
                 name: chat
                 port:
-                  number: 3000
+                  number: 4000
           - path: /socket
             pathType: Exact
             backend:
               service:
                 name: chat
                 port:
-                  number: 3000
+                  number: 4000
