@@ -8,8 +8,8 @@ spec:
   ports:
     - name: chat
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 4000
+      targetPort: 4000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,3 +28,6 @@ spec:
       containers:
         - name: chat
           image: unichat/chat
+          env:
+            - name: REDIS_URI
+              value: "chat-redis"

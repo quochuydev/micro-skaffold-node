@@ -7,11 +7,21 @@ import jwt from "jsonwebtoken";
 import { createAdapter } from "socket.io-redis";
 import { RedisClient } from "redis";
 
+if (!process.env.REDIS_URI) {
+  throw new Error("REDIS_URI must be defined");
+}
+
 const app = express();
+
 app.use(json());
 app.use(cors());
 
 const server = createServer(app);
+
+app.get("/api", function (req: any, res: any) {
+  res.send("this is server");
+});
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -21,7 +31,7 @@ const io = new Server(server, {
     credentials: true,
   },
   allowEIO3: true,
-  path: "/socket/communication",
+  path: "/socket",
 });
 
 // @ts-ignore
@@ -97,18 +107,6 @@ io.use(async (socket: any, next) => {
   });
 });
 
-const start = async () => {
-  if (!process.env.REDIS_URI) {
-    throw new Error("REDIS_URI must be defined");
-  }
-};
-
-app.get("/", function (req, res) {
-  res.send("this is server");
+server.listen(4000, () => {
+  console.log("Communication Service is listening on port 4000");
 });
-
-server.listen(3000, () => {
-  console.log("Communication Service is listening on port 3000");
-});
-
-start();

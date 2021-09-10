@@ -4,7 +4,6 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/issuer: "unichat-prod"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -21,12 +20,8 @@ metadata:
        proxy_cache_bypass $http_upgrade;
        }
 spec:
-  tls:
-    - hosts:
-        - www.datedi.xyz
-      secretName: unichat-tls
   rules:
-    - host: www.datedi.xyz
+    - host: app.local
       http:
         paths:
           - path: /?(.*)
@@ -35,11 +30,11 @@ spec:
               service:
                 name: chat
                 port:
-                  number: 3000
+                  number: 4000
           - path: /socket
             pathType: Exact
             backend:
               service:
                 name: chat
                 port:
-                  number: 3000
+                  number: 4000
