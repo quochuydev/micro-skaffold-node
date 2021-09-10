@@ -80,7 +80,7 @@ io.use(async (socket: any, next) => {
   socket.on("channel.message", async (data: any) => {
     const { id, type, content } = data;
     const user = socket.user;
-    socket.to(id).emit("channel.message", {});
+    socket.to(id).emit("channel.message", { id, type, content, user });
     socket.to(socket.personal_room).emit("channel.list.reload"); // To update list chat
   });
 
