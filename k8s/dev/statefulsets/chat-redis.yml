@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-redis
+  labels:
+    app: chat-redis
+spec:
+  ports:
+    - name: chat-redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  clusterIP: None
+  selector:
+    app: chat-redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chat-redis
+spec:
+  selector:
+    matchLabels:
+      app: chat-redis
+  serviceName: "chat-redis"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chat-redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: chat-redis
+          image: "docker.io/redis:6.2.5"
+          ports:
+            - containerPort: 6379
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: chat-redis-volume
+              mountPath: /data/chat-redis
+  volumeClaimTemplates:
+    - metadata:
+        name: chat-redis-volume
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
