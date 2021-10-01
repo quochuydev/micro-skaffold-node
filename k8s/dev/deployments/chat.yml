@@ -28,3 +28,9 @@ spec:
       containers:
         - name: chat
           image: asia.gcr.io/coffee-8fb06/chat
+          resources:
+            requests:
+              cpu: 200m
+          env:
+            - name: REDIS_URI
+              value: "chat-redis"

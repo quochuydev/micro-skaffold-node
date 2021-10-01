@@ -5,6 +5,7 @@ deploy:
   kubectl:
     manifests:
       - ./k8s/dev/deployments/*
+      - ./k8s/dev/pods/*
       - ./k8s/dev/issuers/*
 build:
   googleCloudBuild:
@@ -17,5 +18,5 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .

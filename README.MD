@@ -12,7 +12,7 @@ kubectl create -f .
 ```
 
 # Then use Skaffold to deploy
-```shell
-skaffold dev -f skaffold-dev.yml
-```
 
+```shell
+skaffold dev -f skaffold-dev.yaml
+```

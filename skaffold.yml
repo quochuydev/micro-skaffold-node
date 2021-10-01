@@ -5,6 +5,7 @@ deploy:
   kubectl:
     manifests:
       - ./k8s/local/deployments/*
+      - ./k8s/local/pods/*
 build:
   local:
     push: false
@@ -15,5 +16,5 @@ build:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .

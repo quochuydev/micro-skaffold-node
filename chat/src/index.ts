@@ -18,8 +18,17 @@ app.use(cors());
 
 const server = createServer(app);
 
+app.get("/", function (req: any, res: any) {
+  res.send("hello world, test in /api");
+});
+
 app.get("/api", function (req: any, res: any) {
   res.send("this is server");
+});
+
+app.get("/shutdown", (req, res) => {
+  // res.sendStatus(200);
+  process.exit(0);
 });
 
 const io = new Server(server, {
@@ -81,7 +90,7 @@ io.use(async (socket: any, next) => {
     const { id, type, content } = data;
     const user = socket.user;
     socket.to(id).emit("channel.message", { id, type, content, user });
-    socket.to(socket.personal_room).emit("channel.list.reload"); // To update list chat
+    socket.to(socket.personal_room).emit("channel.list.reload");
   });
 
   socket.on("channel.typing.start", async (data: any) => {
