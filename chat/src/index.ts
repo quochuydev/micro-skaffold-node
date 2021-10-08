@@ -8,6 +8,9 @@ import { createAdapter } from "socket.io-redis";
 import { RedisClient } from "redis";
 import mongoose from "mongoose";
 
+console.log(process.env.REDIS_URI);
+console.log(process.env.MONGO_URI);
+
 if (!process.env.REDIS_URI) {
   throw new Error("REDIS_URI must be defined");
 }
@@ -28,7 +31,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-} as any);
+});
 
 app.get("/", function (req: any, res: any) {
   res.send("hello world, test in /api");

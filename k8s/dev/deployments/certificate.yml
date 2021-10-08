@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: unichat-tls
+  namespace: default
+spec:
+  secretName: unichat-tls
+  issuerRef:
+    name: unichat-prod
+    kind: Issuer
+  commonName: chat.cafe2hdaily.xyz
+  dnsNames:
+    - chat.cafe2hdaily.xyz
