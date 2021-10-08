@@ -36,6 +36,9 @@ export const initSocketIO = (server: any) => {
 
       if (payload) {
         const user = await userModel.findOne({ _id: payload._id });
+        if (!user) {
+          return next(new Error("Not Authorize"));
+        }
         socket.personal_room = user._id;
         socket.join(user._id);
         socket.user = user;

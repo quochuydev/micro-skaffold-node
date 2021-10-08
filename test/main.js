@@ -2,11 +2,10 @@ const app = new Vue({
   el: "#app",
   data: {
     // host: "http://app.local",
-    // host: "https://chat.cafe2hdaily.xyz",
-    host: "http://localhost:4000",
+    host: "https://chat.cafe2hdaily.xyz",
+    // host: "http://localhost:4000",
     title: "Chat",
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwNmZlYjBiNTg0ZWNmNGMzYWU0ZDUiLCJpYXQiOjE2MzM3MTA1NjN9.hRHUKayJn2syGM4YoyscFrEaVTosbZzO3ehTmzKH5lE",
+    token: "",
     user: null,
     rooms: [],
     selectedRoomId: null,

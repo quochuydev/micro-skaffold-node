@@ -1,6 +1,6 @@
 # @host = http://app.local
-# @host = https://chat.cafe2hdaily.xyz
-@host = http://localhost:4000
+@host = https://chat.cafe2hdaily.xyz
+# @host = http://localhost:4000
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwNmZlYjBiNTg0ZWNmNGMzYWU0ZDUiLCJpYXQiOjE2MzM3MTAwNTl9.JwmrmybdYCrzHhIZI3EQmpmysj37ofYDUJmE8YQaxDM
 
 ###
@@ -24,10 +24,13 @@ content-type: application/json
 
 ###
 GET {{host}}/api/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwNmZlYjBiNTg0ZWNmNGMzYWU0ZDUiLCJpYXQiOjE2MzM3MTA1NjN9.hRHUKayJn2syGM4YoyscFrEaVTosbZzO3ehTmzKH5lE
+Authorization: Bearer {{token}}
 
 ###
 
 GET {{host}}/api/messages
+
+###
+DELETE {{host}}/api/messages
 
 ###
