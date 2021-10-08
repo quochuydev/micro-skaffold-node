@@ -42,7 +42,7 @@ const messageModel = mongoose.model("message", MessageSchema);
 
 app.get("/api", async function (req: any, res: any) {
   await messageModel.create({ content: Date.now() });
-  const messages = await messageModel.find({});
+  const messages = await messageModel.find({}, null, { limit: 20 });
   res.json(messages);
 });
 
