@@ -23,10 +23,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - www.datedi.xyz
+        - chat.cafeman.xyz
       secretName: unichat-tls
   rules:
-    - host: www.datedi.xyz
+    - host: chat.cafeman.xyz
       http:
         paths:
           - path: /?(.*)

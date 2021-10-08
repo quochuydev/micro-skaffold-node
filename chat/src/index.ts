@@ -6,9 +6,14 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import { createAdapter } from "socket.io-redis";
 import { RedisClient } from "redis";
+import mongoose from "mongoose";
 
 if (!process.env.REDIS_URI) {
   throw new Error("REDIS_URI must be defined");
+}
+
+if (!process.env.MONGO_URI) {
+  throw new Error("MONGO_URI must be defined");
 }
 
 const app = express();
@@ -18,12 +23,27 @@ app.use(cors());
 
 const server = createServer(app);
 
+mongoose.connect(process.env.MONGO_URI, {
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+} as any);
+
 app.get("/", function (req: any, res: any) {
   res.send("hello world, test in /api");
 });
 
-app.get("/api", function (req: any, res: any) {
-  res.send("this is server");
+const MessageSchema = new mongoose.Schema({
+  content: String,
+});
+
+const messageModel = mongoose.model("message", MessageSchema);
+
+app.get("/api", async function (req: any, res: any) {
+  await messageModel.create({ content: Date.now() });
+  const messages = await messageModel.find({});
+  res.json(messages);
 });
 
 app.get("/shutdown", (req, res) => {
