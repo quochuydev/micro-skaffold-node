@@ -16,14 +16,19 @@
   <h1 class="text-center">{{ title }}</h1>
   <br>
   <div id="status"></div>
+  <div>
+    <p>token</p>
+    <input type="text" v-model="token" id="token" class="form-control" placeholder="Enter token...">
+    <button id="login" class="btn mt-1" @click.prevent="login">Login</button>
+  </div>
   <div class="row mt-2">
     <div class="col-md-4 col-sm-12">
       <div class="list-group">
         <button v-for="room of rooms"
-          type="button"
-          v-on:click='joinRoom(room._id)'
-          class="list-group-item list-group-item-action"
-          v-bind:class='{active: selectedRoomId === room.id}'>
+                type="button"
+                v-on:click='joinRoom(room._id)'
+                class="list-group-item list-group-item-action"
+                v-bind:class='{active: selectedRoomId === room.id}'>
           {{ room._id }}
         </button>
       </div>
@@ -38,13 +43,13 @@
           </div>
         </div>
         <br>
-        <textarea :disabled='!selectedRoomId' id="textarea" class="form-control" v-model="text"
+        <textarea :disabled='!user || !selectedRoomId' id="textarea" class="form-control" v-model="text"
           placeholder="Enter message..." v-on:keyup="handleChange" v-on:click="handleSeen" ></textarea>
         <br>
         <p>room: {{selectedRoomId}}</p> 
         <p>partner is typing..... {{typing}}</p> 
         <br>
-        <button :disabled='!selectedRoomId' id="send" class="btn primary" @click.prevent="sendMessage">Send</button>
+        <button :disabled='!user || !selectedRoomId' id="send" class="btn primary" @click.prevent="sendMessage">Send</button>
       </div>
     </div>
   </div>

@@ -11,7 +11,6 @@ const app = new Vue({
     socket: null,
     http: null,
     typing: false,
-    seen: false,
   },
   beforeMount() {
     this.initSocket();
@@ -42,7 +41,6 @@ const app = new Vue({
           content: this.text,
           id: this.selectedRoomId,
         };
-        this.seen = false;
         this.socket.emit("channel.message", message);
         this.text = "";
       }
@@ -92,7 +90,6 @@ const app = new Vue({
 
       this.socket.on("channel.seen", (seen) => {
         console.log("channel.seen", seen);
-        this.seen = true;
       });
     },
     formatMessage(message) {
