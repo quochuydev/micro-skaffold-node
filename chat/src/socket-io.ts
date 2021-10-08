@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import { createAdapter } from "socket.io-redis";
 import { RedisClient } from "redis";
 
+import userModel from "./models/user";
+import messageModel from "./models/message";
+
 export const initSocketIO = (server: any) => {
   const io = new Server(server, {
     cors: {
@@ -29,12 +32,14 @@ export const initSocketIO = (server: any) => {
   io.use(async (socket: any, next) => {
     if (socket.handshake.query && socket.handshake.query.token) {
       const token = socket.handshake.query.token;
-      const payload: any = jwt.verify(token, process.env.JWT_KEY!);
+      const payload: any = jwt.verify(token, process.env.JWT_KEY || "JWT_KEY");
+
       if (payload) {
-        const user = { id: "" };
-        socket.personal_room = user.id;
-        socket.join(user.id);
+        const user = await userModel.findOne({ _id: payload._id });
+        socket.personal_room = user._id;
+        socket.join(user._id);
         socket.user = user;
+
         next();
       }
     } else {
@@ -51,6 +56,7 @@ export const initSocketIO = (server: any) => {
       socket.emit("notification", {
         message: "You joined the Chat",
         status: true,
+        id,
       });
     });
 
@@ -62,6 +68,10 @@ export const initSocketIO = (server: any) => {
     socket.on("channel.message", async (data: any) => {
       const { id, type, content } = data;
       const user = socket.user;
+
+      await messageModel.create({ content, user_id: user._id });
+      console.log(id, socket.personal_room);
+
       socket.to(id).emit("channel.message", { id, type, content, user });
       socket.to(socket.personal_room).emit("channel.list.reload");
     });

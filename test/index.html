@@ -17,9 +17,14 @@
   <br>
   <div id="status"></div>
   <div>
+    <!-- <label>username</label>
+    <input type="text" v-model="username" id="username" class="form-control" placeholder="Enter username...">
+    <label>password</label>
+    <input type="text" v-model="password" id="password" class="form-control" placeholder="Enter password...">
+    <button id="login" class="btn mt-1" @click.prevent="login">Login</button> -->
     <p>token</p>
     <input type="text" v-model="token" id="token" class="form-control" placeholder="Enter token...">
-    <button id="login" class="btn mt-1" @click.prevent="login">Login</button>
+    <button id="join" class="btn mt-1" @click.prevent="join">join</button>
   </div>
   <div class="row mt-2">
     <div class="col-md-4 col-sm-12">
@@ -47,6 +52,7 @@
           placeholder="Enter message..." v-on:keyup="handleChange" v-on:click="handleSeen" ></textarea>
         <br>
         <p>room: {{selectedRoomId}}</p> 
+        <p>user: {{user?._id}}</p> 
         <p>partner is typing..... {{typing}}</p> 
         <br>
         <button :disabled='!user || !selectedRoomId' id="send" class="btn primary" @click.prevent="sendMessage">Send</button>
