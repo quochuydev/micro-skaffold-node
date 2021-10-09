@@ -111,8 +111,6 @@ const app = new Vue({
         query: { token: this.token },
       });
 
-      // this.joinRoom("roomId");
-
       this.socket.on("notification", (data) => {
         console.log("notification", data);
       });
@@ -143,6 +141,7 @@ const app = new Vue({
         console.log("channel.seen", seen);
       });
     },
+
     formatMessage(message) {
       const name = message.creator.firstName || message.creatorId;
       return {
@@ -151,10 +150,11 @@ const app = new Vue({
         name,
       };
     },
+
     handleChange() {
       this.socket.emit("channel.typing.start");
-      // this.socket.emit("channel.delete", { id: this.selectedRoomId });
     },
+
     handleSeen() {
       console.log("seen");
       this.socket.emit("channel.seen");
