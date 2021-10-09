@@ -34,6 +34,7 @@ const app = new Vue({
       });
       console.log(data);
       this.token = data.token;
+      this.join();
     },
 
     async join() {
@@ -127,14 +128,10 @@ const app = new Vue({
 
       this.socket.on("channel.typing.processing", () => {
         console.log("channel.typing.processing", this.socket.typing);
-
-        setTimeout(() => {
-          this.socket.emit("channel.typing.stop");
-        }, 1000);
       });
 
-      this.socket.on("channel.typing.stop", () => {
-        console.log("channel.typing.stop");
+      this.socket.on("channel.typing.stop", (data) => {
+        console.log("channel.typing.stop", data);
       });
 
       this.socket.on("channel.seen", (seen) => {
@@ -153,6 +150,10 @@ const app = new Vue({
 
     handleChange() {
       this.socket.emit("channel.typing.start");
+
+      setTimeout(() => {
+        this.socket.emit("channel.typing.stop");
+      }, 5000);
     },
 
     handleSeen() {
@@ -161,3 +162,7 @@ const app = new Vue({
     },
   },
 });
+
+function timeout(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
