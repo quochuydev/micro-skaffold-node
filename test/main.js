@@ -1,11 +1,14 @@
 const app = new Vue({
   el: "#app",
   data: {
-    // host: "http://app.local",
-    host: "https://chat.cafe2hdaily.xyz",
-    // host: "http://localhost:4000",
     title: "Chat",
+    // host: "http://app.local",
+    // host: "https://chat.cafe2hdaily.xyz",
+    host: "http://localhost:4000",
+    username: "admin",
+    password: "admin",
     token: "",
+    partnerId: null,
     user: null,
     rooms: [],
     selectedRoomId: null,
@@ -14,12 +17,24 @@ const app = new Vue({
     socket: null,
     http: null,
     typing: false,
+    users: [],
   },
-  // beforeMount() {
-  //   this.initSocket();
-  // },
+
+  async beforeMount() {
+    const { data } = await axios.create({}).get(this.host + "/api/users");
+    console.log(data);
+    this.users = data;
+  },
+
   methods: {
-    async login() {},
+    async login() {
+      const { data } = await axios.create({}).post(this.host + "/api/signin", {
+        username: this.username,
+        password: this.password,
+      });
+      console.log(data);
+      this.token = data.token;
+    },
 
     async join() {
       this.http = axios.create({
@@ -32,9 +47,25 @@ const app = new Vue({
       this.user = data;
 
       this.initSocket();
+      this.getRooms();
     },
+
     async getRooms() {
-      this.rooms = [];
+      const { data } = await this.http.get(this.host + "/api/rooms");
+      console.log(data);
+      this.rooms = data;
+    },
+
+    async createRoom() {
+      if (!this.partnerId) {
+        return;
+      }
+
+      const { data } = await this.http.post(this.host + "/api/rooms", {
+        partnerId: this.partnerId,
+      });
+      console.log(data);
+      this.getRooms();
     },
 
     async joinRoom(id) {
@@ -48,7 +79,9 @@ const app = new Vue({
     },
 
     async getMessages() {
-      const { data } = await this.http.get(this.host + "/api/messages");
+      const { data } = await this.http.get(
+        `${this.host}/api/rooms/${this.selectedRoomId}/messages`
+      );
       console.log(data);
       this.messages = data;
     },
@@ -78,7 +111,7 @@ const app = new Vue({
         query: { token: this.token },
       });
 
-      this.joinRoom("roomId");
+      // this.joinRoom("roomId");
 
       this.socket.on("notification", (data) => {
         console.log("notification", data);

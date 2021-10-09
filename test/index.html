@@ -17,14 +17,22 @@
   <br>
   <div id="status"></div>
   <div>
-    <!-- <label>username</label>
+    <label>username</label>
     <input type="text" v-model="username" id="username" class="form-control" placeholder="Enter username...">
     <label>password</label>
     <input type="text" v-model="password" id="password" class="form-control" placeholder="Enter password...">
-    <button id="login" class="btn mt-1" @click.prevent="login">Login</button> -->
-    <p>token</p>
+    <button id="login" class="btn mt-1" @click.prevent="login">Login</button>
+
     <input type="text" v-model="token" id="token" class="form-control" placeholder="Enter token...">
     <button id="join" class="btn mt-1" @click.prevent="join">join</button>
+
+    <p v-for="user of users" class="list-group-item list-group-item-action">
+      {{ user._id }}
+    </p>
+    
+    <input type="text" v-model="partnerId" id="partnerId" class="form-control" placeholder="Enter partnerId..."
+      :disabled='!user'>
+    <button id="createRoom" class="btn mt-1" @click.prevent="createRoom" :disabled='!user'>createRoom</button>
   </div>
   <div class="row mt-2">
     <div class="col-md-4 col-sm-12">

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import * as bcrypt from "bcrypt";
 
 const MessageSchema = new mongoose.Schema({
   content: String,
-  user_id: String,
+  userId: String,
+  roomId: String,
 });
 
 const messageModel = mongoose.model("message", MessageSchema);

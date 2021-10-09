@@ -35,7 +35,7 @@ export const initSocketIO = (server: any) => {
       const payload: any = jwt.verify(token, process.env.JWT_KEY || "JWT_KEY");
 
       if (payload) {
-        const user = await userModel.findOne({ _id: payload._id });
+        const user = await userModel.findById(payload._id);
         if (!user) {
           return next(new Error("Not Authorize"));
         }
@@ -72,7 +72,7 @@ export const initSocketIO = (server: any) => {
       const { id, type, content } = data;
       const user = socket.user;
 
-      await messageModel.create({ content, user_id: user._id });
+      await messageModel.create({ content, userId: user._id, roomId: id });
       console.log(id, socket.personal_room);
 
       socket.to(id).emit("channel.message", { id, type, content, user });

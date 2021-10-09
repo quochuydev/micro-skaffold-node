@@ -4,6 +4,8 @@ import * as bcrypt from "bcrypt";
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String,
+  googleId: String,
+  facebookId: String,
 });
 
 UserSchema.pre("save", async function (done) {

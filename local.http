@@ -1,30 +1,31 @@
 # @host = http://app.local
-@host = https://chat.cafe2hdaily.xyz
-# @host = http://localhost:4000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwNmZlYjBiNTg0ZWNmNGMzYWU0ZDUiLCJpYXQiOjE2MzM3MTAwNTl9.JwmrmybdYCrzHhIZI3EQmpmysj37ofYDUJmE8YQaxDM
+# @host = https://chat.cafe2hdaily.xyz
+@host = http://localhost:4000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwOTZjZjFmMjA4NzAwMTkzZjg0ODMiLCJpYXQiOjE2MzM3NDM3Mjl9.8Pyvsk4IMIyAKd2S6W3GqHQcTNl0rlF6DVNdmz98-h0
 
 ###
-POST {{host}}/signup
+POST {{host}}/api/signup
 content-type: application/json
 
 {
-    "username": "admin",
-    "password": "admin"
+    "username": "user",
+    "password": "user"
 }
 
 
 ###
-POST {{host}}/signin
+# @name signin
+POST {{host}}/api/signin
 content-type: application/json
 
 {
-    "username": "admin",
-    "password": "admin"
+    "username": "user",
+    "password": "user"
 }
 
 ###
 GET {{host}}/api/user
-Authorization: Bearer {{token}}
+Authorization: Bearer {{signin.response.body.token}}
 
 ###
 
