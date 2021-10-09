@@ -3,8 +3,8 @@ const app = new Vue({
   data: {
     title: "Chat",
     // host: "http://app.local",
-    // host: "https://chat.cafe2hdaily.xyz",
-    host: "http://localhost:4000",
+    host: "https://chat.cafe2hdaily.xyz",
+    // host: "http://localhost:4000",
     username: "admin",
     password: "admin",
     token: "",

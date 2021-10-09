@@ -48,19 +48,23 @@ app.get("/api/rooms", async function (req, res: any) {
 });
 
 const middleware = async (req: any, res: Response, next: NextFunction) => {
-  const token: any = req.headers["authorization"]?.split(" ")[1];
-  const payload: any = jwt.verify(token, config.jwtKey);
+  try {
+    const token: any = req.headers["authorization"]?.split(" ")[1];
+    const payload: any = jwt.verify(token, config.jwtKey);
 
-  const user = await userModel.findById(payload._id);
-  if (!user) {
-    throw { message: "Not Found", status: 404 };
+    const user = await userModel.findById(payload._id);
+    if (!user) {
+      throw { message: "Not Found", status: 404 };
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).send(error);
   }
-
-  req.user = user;
-  next();
 };
 
-app.post("/api/rooms", middleware, async function (req: any, res: any) {
+app.post("/api/rooms", middleware, async (req: any, res: any) => {
   const { partnerId } = req.body;
   const userId = req.user._id;
 

@@ -27,7 +27,7 @@
     <button id="join" class="btn mt-1" @click.prevent="join">join</button>
 
     <p v-for="user of users" class="list-group-item list-group-item-action">
-      {{ user._id }}
+      {{ user._id }} {{user.username}}
     </p>
     
     <input type="text" v-model="partnerId" id="partnerId" class="form-control" placeholder="Enter partnerId..."
@@ -38,10 +38,10 @@
     <div class="col-md-4 col-sm-12">
       <div class="list-group">
         <button v-for="room of rooms"
-                type="button"
-                v-on:click='joinRoom(room._id)'
-                class="list-group-item list-group-item-action"
-                v-bind:class='{active: selectedRoomId === room.id}'>
+          type="button"
+          v-on:click='joinRoom(room._id)'
+          class="list-group-item list-group-item-action"
+          v-bind:class='{active: selectedRoomId === room.id}'>
           {{ room._id }}
         </button>
       </div>

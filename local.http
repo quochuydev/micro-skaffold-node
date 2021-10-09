@@ -1,7 +1,6 @@
 # @host = http://app.local
-# @host = https://chat.cafe2hdaily.xyz
-@host = http://localhost:4000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTYwOTZjZjFmMjA4NzAwMTkzZjg0ODMiLCJpYXQiOjE2MzM3NDM3Mjl9.8Pyvsk4IMIyAKd2S6W3GqHQcTNl0rlF6DVNdmz98-h0
+@host = https://chat.cafe2hdaily.xyz
+# @host = http://localhost:4000
 
 ###
 POST {{host}}/api/signup
