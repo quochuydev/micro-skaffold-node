@@ -33,19 +33,14 @@ const app = new Vue({
         password: this.password,
       });
       console.log(data);
+      this.user = data.user;
       this.token = data.token;
-      this.join();
-    },
 
-    async join() {
       this.http = axios.create({
         headers: {
           Authorization: `Bearer ${this.token}`,
         },
       });
-
-      const { data } = await this.http.get(this.host + "/api/user");
-      this.user = data;
 
       this.initSocket();
       this.getRooms();
@@ -113,7 +108,7 @@ const app = new Vue({
       });
 
       this.socket.on("notification", (data) => {
-        console.log("notification", data);
+        console.log(data);
       });
 
       this.socket.on("channel.message", async (data) => {
