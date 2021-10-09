@@ -1,3 +1,5 @@
+**_I. Cloud_**
+
 # Init Project
 
 ```shell
@@ -16,3 +18,10 @@ kubectl create -f .
 ```shell
 skaffold dev -f skaffold-dev.yaml
 ```
+
+**_II. Local_**
+
+1. minikube start
+2. create statefulsets
+   cd k8s/local/statefulsets
+   kubectl create -f .

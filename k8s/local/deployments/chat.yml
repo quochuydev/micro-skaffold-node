@@ -29,5 +29,7 @@ spec:
         - name: chat
           image: unichat/chat
           env:
+            - name: MONGO_URI
+              value: "mongodb://chat-mongo:27017/chat"
             - name: REDIS_URI
               value: "chat-redis"
