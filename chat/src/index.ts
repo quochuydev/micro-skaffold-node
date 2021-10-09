@@ -5,6 +5,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import path from "path";
 
 import { initSocketIO } from "./socket-io";
 import userModel from "./models/user";
@@ -34,10 +35,6 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
 });
 
 initSocketIO(server);
-
-app.get("/", function (req: any, res: any) {
-  res.send("hello world, test in /api");
-});
 
 app.get("/api", async function (req: any, res: any) {
   await messageModel.create({ content: Date.now() });
@@ -129,6 +126,11 @@ app.post("/api/signup", async function (req: any, res: any, next: any) {
   const token = jwt.sign({ _id: user._id }, "JWT_KEY");
 
   res.json({ token });
+});
+
+app.use("/", express.static(path.resolve("client")));
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve("client", "index.html"));
 });
 
 app.use(function (err: any, req: any, res: any, next: any) {
