@@ -4,7 +4,7 @@ import { createServer } from "http";
 import cors from "cors";
 import mongoose from "mongoose";
 import path from "path";
-import { initSocketIO } from "./socket-io";
+import { initSocketIO } from "./socket";
 
 import roomRouter from "./routers/room";
 import userRouter from "./routers/user";

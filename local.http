@@ -27,10 +27,10 @@ GET {{host}}/api/user
 Authorization: Bearer {{signin.response.body.token}}
 
 ###
-
-GET {{host}}/api/messages
+# @name rooms
+GET {{host}}/api/rooms
 
 ###
-DELETE {{host}}/api/messages
+GET {{host}}/api/rooms/{{rooms.response.body[0]._id}}/messages
 
 ###
