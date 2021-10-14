@@ -3,13 +3,6 @@ import { json } from "body-parser";
 import { createServer } from "http";
 import cors from "cors";
 import mongoose from "mongoose";
-import path from "path";
-import { Message } from "node-nats-streaming";
-
-import { initSocketIO } from "./socket";
-import roomRouter from "./routers/room";
-import userRouter from "./routers/user";
-import userModel from "./models/user";
 
 import config from "./config";
 
@@ -32,10 +25,11 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
+
 import { Schema, model } from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 
-natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
+natsWrapper.connect("unichat", "user", "http://localhost:4222").then(() => {
   const options = natsWrapper.client
     .subscriptionOptions()
     .setManualAckMode(true)
@@ -46,31 +40,30 @@ natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
     console.log("NATS connection closed");
     process.exit();
   });
-
   process.on("SIGINT", () => natsWrapper.client.close());
   process.on("SIGTERM", () => natsWrapper.client.close());
-
-  const userUpdatedSubscriber = natsWrapper.client.subscribe(
-    "user:updated",
-    "chatServiceQueueGroup",
-    options
-  );
-
-  userUpdatedSubscriber.on("message", async (msg: Message) => {
-    const eventData = JSON.parse(msg.getData().toString());
-    console.log(eventData);
-    msg.ack();
-  });
 });
 
-initSocketIO(server);
+const UserSchema = new Schema({
+  firstName: String,
+  phoneNuber: String,
+  email: { type: String },
+  createdAt: Date,
+  updatedAt: Date,
+});
 
-app.use(roomRouter);
-app.use(userRouter);
+UserSchema.post("save", function (user, next) {
+  natsWrapper.client.publish("user:updated", JSON.stringify(user), () => {
+    console.log("Event user:updated published");
+  });
+  next();
+});
 
-app.use("/", express.static(path.resolve("client")));
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve("client", "index.html"));
+const User = model("User", UserSchema);
+
+app.get("/api/user", async function (req: any, res: any) {
+  const user = await User.create({ firstName: Date.now() });
+  res.json(user);
 });
 
 app.use(function (err: any, req: any, res: any, next: any) {
@@ -80,6 +73,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(err.status || 400).send(err);
 });
 
-server.listen(4001, () => {
+server.listen(4000, () => {
   console.log("Service is listening on port 4000");
 });

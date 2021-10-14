@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  nats:
+    image: nats-streaming:0.22.0
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    entrypoint:
+      - /nats-streaming-server
+      - -cid
+      - unichat

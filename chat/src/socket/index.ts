@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import { createAdapter } from "socket.io-redis";
 import { RedisClient } from "redis";
 
-import userModel from "./models/user";
-import messageModel from "./models/message";
+import userModel from "../models/user";
+import messageModel from "../models/message";
 
 export const initSocketIO = (server: any) => {
   const io = new Server(server, {
