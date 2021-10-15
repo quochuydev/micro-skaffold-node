@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+spec:
+  selector:
+    app: user
+  ports:
+    - name: user
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user
+          image: asia.gcr.io/coffee-8fb06/user
+          env:
+            - name: MONGO_URI
+              value: "mongodb://user-mongo:27017/user"
+            - name: NATS_URI
+              valueFrom:
+                secretKeyRef:
+                  name: unichat
+                  key: NATS_URI
