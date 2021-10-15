@@ -1,10 +1,12 @@
-import express, { NextFunction, Response } from "express";
+import express from "express";
 import { json } from "body-parser";
 import { createServer } from "http";
 import cors from "cors";
 import mongoose from "mongoose";
 
+import { natsWrapper } from "./nats-wrapper";
 import config from "./config";
+import User from "./models/user";
 
 console.log("**********");
 console.log("redis", process.env.REDIS_URI);
@@ -26,9 +28,6 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
   useCreateIndex: true,
 });
 
-import { Schema, model } from "mongoose";
-import { natsWrapper } from "./nats-wrapper";
-
 natsWrapper.connect("unichat", "user", "http://localhost:4222").then(() => {
   const options = natsWrapper.client
     .subscriptionOptions()
@@ -40,26 +39,10 @@ natsWrapper.connect("unichat", "user", "http://localhost:4222").then(() => {
     console.log("NATS connection closed");
     process.exit();
   });
+
   process.on("SIGINT", () => natsWrapper.client.close());
   process.on("SIGTERM", () => natsWrapper.client.close());
 });
-
-const UserSchema = new Schema({
-  firstName: String,
-  phoneNuber: String,
-  email: { type: String },
-  createdAt: Date,
-  updatedAt: Date,
-});
-
-UserSchema.post("save", function (user, next) {
-  natsWrapper.client.publish("user:updated", JSON.stringify(user), () => {
-    console.log("Event user:updated published");
-  });
-  next();
-});
-
-const User = model("User", UserSchema);
 
 app.get("/api/user", async function (req: any, res: any) {
   const user = await User.create({ firstName: Date.now() });

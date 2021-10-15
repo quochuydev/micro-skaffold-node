@@ -1,4 +1,4 @@
-import express, { NextFunction, Response } from "express";
+import express from "express";
 import { json } from "body-parser";
 import { createServer } from "http";
 import cors from "cors";
@@ -12,6 +12,7 @@ import userRouter from "./routers/user";
 import userModel from "./models/user";
 
 import config from "./config";
+import { natsWrapper } from "./nats-wrapper";
 
 console.log("**********");
 console.log("redis", process.env.REDIS_URI);
@@ -33,14 +34,12 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
   useCreateIndex: true,
 });
 
-import { natsWrapper } from "./nats-wrapper";
-
 natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
   const options = natsWrapper.client
     .subscriptionOptions()
     .setManualAckMode(true)
     .setDeliverAllAvailable()
-    .setDurableName("userService");
+    .setDurableName("chatService");
 
   natsWrapper.client.on("close", () => {
     console.log("NATS connection closed");
