@@ -7,43 +7,49 @@ import middleware from "../middleware";
 
 const router = express.Router();
 
-router.get("/api/users", async function (req: any, res: any) {
+router.get("/api/users/getList", async function (req: any, res: any) {
   const users = await userModel.find({});
   res.json(users);
 });
 
-router.get("/api/user", middleware, function (req: any, res: any) {
+router.get("/api/users/current", middleware, function (req: any, res: any) {
   res.json(req.user);
 });
 
-router.post("/api/signin", async function (req: any, res: any, next: any) {
-  const { username, password } = req.body;
+router.post(
+  "/api/users/signin",
+  async function (req: any, res: any, next: any) {
+    const { username, password } = req.body;
 
-  const user = await userModel.findOne({ username });
+    const user = await userModel.findOne({ username });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return next({ message: "INVALID_USER" });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return next({ message: "INVALID_USER" });
+    }
+
+    const token = jwt.sign({ _id: user._id }, "JWT_KEY");
+
+    res.json({ user, token });
   }
+);
 
-  const token = jwt.sign({ _id: user._id }, "JWT_KEY");
+router.post(
+  "/api/users/signup",
+  async function (req: any, res: any, next: any) {
+    const { username, password } = req.body;
 
-  res.json({ user, token });
-});
+    const userExisted = await userModel.count({ username });
+    if (userExisted) {
+      return next({ message: "USER_EXISTED" });
+    }
 
-router.post("/api/signup", async function (req: any, res: any, next: any) {
-  const { username, password } = req.body;
+    const newUser = new userModel({ username, password });
+    const user: any = await newUser.save();
 
-  const userExisted = await userModel.count({ username });
-  if (userExisted) {
-    return next({ message: "USER_EXISTED" });
+    const token = jwt.sign({ _id: user._id }, "JWT_KEY");
+
+    res.json({ token });
   }
-
-  const newUser = new userModel({ username, password });
-  const user: any = await newUser.save();
-
-  const token = jwt.sign({ _id: user._id }, "JWT_KEY");
-
-  res.json({ token });
-});
+);
 
 export default router;

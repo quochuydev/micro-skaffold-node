@@ -7,12 +7,12 @@ import middleware from "../middleware";
 
 const router = express.Router();
 
-router.get("/api/rooms", async function (req, res: any) {
+router.get("/api/chat/rooms", async function (req, res: any) {
   const rooms = await roomModel.find({});
   res.json(rooms);
 });
 
-router.post("/api/rooms", middleware, async (req: any, res: any) => {
+router.post("/api/chat/rooms", middleware, async (req: any, res: any) => {
   const { partnerId } = req.body;
   const userId = req.user._id;
 
@@ -37,7 +37,7 @@ router.post("/api/rooms", middleware, async (req: any, res: any) => {
   res.json(room);
 });
 
-router.get("/api/rooms/:roomId/messages", async function (req, res: any) {
+router.get("/api/chat/rooms/:roomId/messages", async function (req, res: any) {
   const messages = await messageModel.find({ roomId: req.params.roomId });
   res.json(messages);
 });

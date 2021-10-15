@@ -8,8 +8,7 @@ import { Message } from "node-nats-streaming";
 
 import { initSocketIO } from "./socket";
 import roomRouter from "./routers/room";
-import userRouter from "./routers/user";
-import userModel from "./models/user";
+import User from "./models/user";
 
 import config from "./config";
 import { natsWrapper } from "./nats-wrapper";
@@ -65,7 +64,6 @@ natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
 initSocketIO(server);
 
 app.use(roomRouter);
-app.use(userRouter);
 
 app.use("/", express.static(path.resolve("client")));
 app.get("/*", (req, res) => {
