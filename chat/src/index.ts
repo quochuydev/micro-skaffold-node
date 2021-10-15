@@ -95,6 +95,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(err.status || 400).send(err);
 });
 
-server.listen(4001, () => {
+server.listen(4000, () => {
   console.log("Service is listening on port 4000");
 });
