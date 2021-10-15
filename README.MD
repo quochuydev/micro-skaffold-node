@@ -1,6 +1,13 @@
-**_I. Cloud_**
+# I. Local
 
-# Init Project
+1. minikube start
+2. create statefulsets
+   cd k8s/local/statefulsets
+   kubectl create -f .
+
+# II. Cloud
+
+## Init Project
 
 ```shell
 # Add Ingress
@@ -13,15 +20,8 @@ cd k8s/dev/statefulsets
 kubectl create -f .
 ```
 
-# Then use Skaffold to deploy
+## Then use Skaffold to deploy
 
 ```shell
 skaffold dev -f skaffold-dev.yaml
 ```
-
-**_II. Local_**
-
-1. minikube start
-2. create statefulsets
-   cd k8s/local/statefulsets
-   kubectl create -f .

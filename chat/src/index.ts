@@ -12,6 +12,7 @@ import User from "./models/user";
 
 import config from "./config";
 import { natsWrapper } from "./nats-wrapper";
+import userModel from "./models/user";
 
 console.log("**********");
 console.log("redis", process.env.REDIS_URI);
@@ -56,7 +57,22 @@ natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
 
   userUpdatedSubscriber.on("message", async (msg: Message) => {
     const eventData = JSON.parse(msg.getData().toString());
-    console.log(eventData);
+    // console.log(eventData);
+    const { _id, firstName } = eventData;
+
+    let user = await userModel.findOne({ referenceId: _id });
+
+    if (!user) {
+      user = new userModel({});
+    }
+
+    user.firstName = firstName;
+    user.referenceId = _id;
+
+    await user.save();
+
+    console.log(user);
+
     msg.ack();
   });
 });
@@ -77,6 +93,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(err.status || 400).send(err);
 });
 
-server.listen(4000, () => {
+server.listen(4001, () => {
   console.log("Service is listening on port 4000");
 });

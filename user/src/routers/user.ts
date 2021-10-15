@@ -16,12 +16,36 @@ router.get("/api/users/current", middleware, function (req: any, res: any) {
   res.json(req.user);
 });
 
+router.put("/api/users/:id", async function (req: any, res: any) {
+  const user = await userModel.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: req.body,
+    },
+    { lean: true, new: true }
+  );
+  res.json(user);
+});
+
+router.delete("/api/users/:id", async function (req: any, res: any) {
+  const user = await userModel.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        deletedAt: new Date(),
+      },
+    },
+    { lean: true, new: true }
+  );
+  res.json(user);
+});
+
 router.post(
   "/api/users/signin",
   async function (req: any, res: any, next: any) {
     const { username, password } = req.body;
 
-    const user = await userModel.findOne({ username });
+    const user = await userModel.findOne({ username, deletedAt: null });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return next({ message: "INVALID_USER" });
@@ -38,7 +62,7 @@ router.post(
   async function (req: any, res: any, next: any) {
     const { username, password } = req.body;
 
-    const userExisted = await userModel.count({ username });
+    const userExisted = await userModel.count({ username, deletedAt: null });
     if (userExisted) {
       return next({ message: "USER_EXISTED" });
     }

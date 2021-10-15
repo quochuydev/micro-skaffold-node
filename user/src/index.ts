@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 
 import { natsWrapper } from "./nats-wrapper";
 import config from "./config";
-import User from "./models/user";
+import userModel from "./models/user";
+import userRouter from "./routers/user";
 
 console.log("**********");
 console.log("redis", process.env.REDIS_URI);
@@ -21,7 +22,7 @@ app.use(cors());
 
 const server = createServer(app);
 
-mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
+mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/user", {
   useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -44,10 +45,7 @@ natsWrapper.connect("unichat", "user", "http://localhost:4222").then(() => {
   process.on("SIGTERM", () => natsWrapper.client.close());
 });
 
-app.get("/api/user", async function (req: any, res: any) {
-  const user = await User.create({ firstName: Date.now() });
-  res.json(user);
-});
+app.use(userRouter);
 
 app.use(function (err: any, req: any, res: any, next: any) {
   if (!err) {

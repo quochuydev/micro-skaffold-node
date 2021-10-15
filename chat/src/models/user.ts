@@ -1,18 +1,8 @@
-import mongoose from "mongoose";
-import * as bcrypt from "bcrypt";
+import mongoose, { Schema } from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   firstName: String,
-  username: String,
-  password: String,
-  googleId: String,
-  facebookId: String,
-});
-
-UserSchema.pre("save", async function (done) {
-  const hashed = await bcrypt.hash(this.get("password"), 10);
-  this.set("password", hashed);
-  done();
+  referenceId: String,
 });
 
 const userModel = mongoose.model("user", UserSchema);

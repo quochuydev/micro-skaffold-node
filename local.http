@@ -1,9 +1,10 @@
 # @host = http://app.local
 # @host = https://chat.cafe2hdaily.xyz
 @host = http://localhost:4000
+@chat_host = http://localhost:4001
 
 ###
-POST {{host}}/api/signup
+POST {{host}}/api/users/signup
 content-type: application/json
 
 {
@@ -14,7 +15,7 @@ content-type: application/json
 
 ###
 # @name signin
-POST {{host}}/api/signin
+POST {{host}}/api/users/signin
 content-type: application/json
 
 {
@@ -23,8 +24,25 @@ content-type: application/json
 }
 
 ###
-GET {{host}}/api/user
-# Authorization: Bearer {{signin.response.body.token}}
+GET {{host}}/api/users/current
+Authorization: Bearer {{signin.response.body.token}}
+
+###
+GET {{host}}/api/users/getList
+Authorization: Bearer {{signin.response.body.token}}
+
+###
+DELETE {{host}}/api/users/{{signin.response.body.user._id}}
+Authorization: Bearer {{signin.response.body.token}}
+
+###
+PUT {{host}}/api/users/{{signin.response.body.user._id}}
+content-type: application/json
+Authorization: Bearer {{signin.response.body.token}}
+
+{
+    "firstName": "user1"
+}
 
 ###
 # @name rooms
