@@ -33,3 +33,8 @@ spec:
               value: "mongodb://chat-mongo:27017/chat"
             - name: REDIS_URI
               value: "chat-redis"
+            - name: NATS_URI
+              valueFrom:
+                secretKeyRef:
+                  name: unichat
+                  key: NATS_URI

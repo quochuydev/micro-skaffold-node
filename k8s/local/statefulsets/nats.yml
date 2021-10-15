@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+spec:
+  ports:
+    - name: client
+      protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - name: monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: 8222
+  clusterIP: None
+  selector:
+    app: nats
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  serviceName: "nats"
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: nats
+          image: nats-streaming:0.22.0
+          args:
+            [
+              "-p",
+              "4222",
+              "-m",
+              "8222",
+              "-hbi",
+              "5s",
+              "-hbt",
+              "5s",
+              "-hbf",
+              "2",
+              "-SD",
+              "-cid",
+              "unichat",
+            ]
+          volumeMounts:
+            - name: nats-volumne
+              mountPath: /data/stan
+  volumeClaimTemplates:
+    - metadata:
+        name: nats-volumne
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi

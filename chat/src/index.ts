@@ -34,48 +34,50 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
   useCreateIndex: true,
 });
 
-natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {
-  const options = natsWrapper.client
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName("chatService");
+natsWrapper
+  .connect("unichat", "chat", process.env.NATS_URI || "http://localhost:4222")
+  .then(() => {
+    const options = natsWrapper.client
+      .subscriptionOptions()
+      .setManualAckMode(true)
+      .setDeliverAllAvailable()
+      .setDurableName("chatService");
 
-  natsWrapper.client.on("close", () => {
-    console.log("NATS connection closed");
-    process.exit();
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed");
+      process.exit();
+    });
+
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
+
+    const userUpdatedSubscriber = natsWrapper.client.subscribe(
+      "user:updated",
+      "chatServiceQueueGroup",
+      options
+    );
+
+    userUpdatedSubscriber.on("message", async (msg: Message) => {
+      const eventData = JSON.parse(msg.getData().toString());
+      // console.log(eventData);
+      const { _id, firstName } = eventData;
+
+      let user = await userModel.findOne({ referenceId: _id });
+
+      if (!user) {
+        user = new userModel({});
+      }
+
+      user.firstName = firstName;
+      user.referenceId = _id;
+
+      await user.save();
+
+      console.log(user);
+
+      msg.ack();
+    });
   });
-
-  process.on("SIGINT", () => natsWrapper.client.close());
-  process.on("SIGTERM", () => natsWrapper.client.close());
-
-  const userUpdatedSubscriber = natsWrapper.client.subscribe(
-    "user:updated",
-    "chatServiceQueueGroup",
-    options
-  );
-
-  userUpdatedSubscriber.on("message", async (msg: Message) => {
-    const eventData = JSON.parse(msg.getData().toString());
-    // console.log(eventData);
-    const { _id, firstName } = eventData;
-
-    let user = await userModel.findOne({ referenceId: _id });
-
-    if (!user) {
-      user = new userModel({});
-    }
-
-    user.firstName = firstName;
-    user.referenceId = _id;
-
-    await user.save();
-
-    console.log(user);
-
-    msg.ack();
-  });
-});
 
 initSocketIO(server);
 

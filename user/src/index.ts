@@ -29,21 +29,23 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/user", {
   useCreateIndex: true,
 });
 
-natsWrapper.connect("unichat", "user", "http://localhost:4222").then(() => {
-  const options = natsWrapper.client
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName("userService");
+natsWrapper
+  .connect("unichat", "user", process.env.NATS_URI || "http://localhost:4222")
+  .then(() => {
+    const options = natsWrapper.client
+      .subscriptionOptions()
+      .setManualAckMode(true)
+      .setDeliverAllAvailable()
+      .setDurableName("userService");
 
-  natsWrapper.client.on("close", () => {
-    console.log("NATS connection closed");
-    process.exit();
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed");
+      process.exit();
+    });
+
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
   });
-
-  process.on("SIGINT", () => natsWrapper.client.close());
-  process.on("SIGTERM", () => natsWrapper.client.close());
-});
 
 app.use(userRouter);
 

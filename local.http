@@ -46,9 +46,9 @@ Authorization: Bearer {{signin.response.body.token}}
 
 ###
 # @name rooms
-GET {{host}}/api/rooms
+GET {{chat_host}}/api/chat/rooms
 
 ###
-GET {{host}}/api/rooms/{{rooms.response.body[0]._id}}/messages
+GET {{chat_host}}/api/chat/rooms/{{rooms.response.body[0]._id}}/messages
 
 ###

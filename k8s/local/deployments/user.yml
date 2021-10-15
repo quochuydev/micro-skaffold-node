@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: chat
+  name: user
 spec:
   selector:
-    app: chat
+    app: user
   ports:
-    - name: chat
+    - name: user
       protocol: TCP
       port: 4000
       targetPort: 4000
@@ -14,28 +14,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat
+  name: user
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chat
+      app: user
   template:
     metadata:
       labels:
-        app: chat
+        app: user
     spec:
       containers:
-        - name: chat
-          image: asia.gcr.io/coffee-8fb06/chat
-          resources:
-            requests:
-              cpu: 200m
+        - name: user
+          image: unichat/user
           env:
             - name: MONGO_URI
-              value: "mongodb://chat-mongo:27017/chat"
-            - name: REDIS_URI
-              value: "chat-redis"
+              value: "mongodb://user-mongo:27017/user"
             - name: NATS_URI
               valueFrom:
                 secretKeyRef:
