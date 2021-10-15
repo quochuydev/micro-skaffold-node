@@ -32,7 +32,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/chat", {
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
-import { Schema, model } from "mongoose";
+
 import { natsWrapper } from "./nats-wrapper";
 
 natsWrapper.connect("unichat", "chat", "http://localhost:4222").then(() => {

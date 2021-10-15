@@ -26,4 +26,4 @@ class NatsWrapper {
   }
 }
 
-export const natsWrapper = new NatsWrapper(); //Singleton
+export const natsWrapper = new NatsWrapper();

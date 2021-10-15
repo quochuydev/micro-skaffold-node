@@ -11,3 +11,9 @@ services:
       - /nats-streaming-server
       - -cid
       - unichat
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    ports:
+      - 6379:6379
