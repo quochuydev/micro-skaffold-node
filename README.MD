@@ -36,3 +36,10 @@ kubectl create -f .
 ```shell
 skaffold dev -f skaffold-dev.yaml
 ```
+
+## Expose database
+
+kubectl get pods
+kubectl expose pod chat-mongo-0 --port=27017 --type=LoadBalancer
+kubectl get services
+kubectl describe service chat-mongo-0
