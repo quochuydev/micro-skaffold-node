@@ -17,3 +17,9 @@ services:
     container_name: redis
     ports:
       - 6379:6379
+
+  # db:
+  #   image: mongo
+  #   container_name: db
+  #   ports:
+  #     - 27017:27017
