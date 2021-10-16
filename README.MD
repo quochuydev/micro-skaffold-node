@@ -7,6 +7,17 @@
 
 # II. Cloud
 
+## Select project
+
+gcloud projects list
+gcloud config set project <project_id>
+
+## Select context
+
+gcloud container clusters get-credentials <cluster_name> --zone asia-southeast1-a
+kubectl config get-contexts
+kubectl config use-context <context_name>
+
 ## Init Project
 
 ```shell
