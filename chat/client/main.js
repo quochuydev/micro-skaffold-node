@@ -3,8 +3,8 @@ const app = new Vue({
   data: {
     title: "Chat",
     // host: "http://app.local",
-    // host: "https://chat.cafe2hdaily.xyz",
-    host: "http://localhost:4000",
+    host: "https://chat.cafe2hdaily.xyz",
+    // host: "http://localhost:4000",
     username: "admin",
     password: "admin",
     token: "",
@@ -22,17 +22,21 @@ const app = new Vue({
   },
 
   async beforeMount() {
-    const { data } = await axios.create({}).get(this.host + "/api/users");
+    const { data } = await axios
+      .create({})
+      .get(this.host + "/api/users/getList");
     console.log(data);
     this.users = data;
   },
 
   methods: {
     async login() {
-      const { data } = await axios.create({}).post(this.host + "/api/signin", {
-        username: this.username,
-        password: this.password,
-      });
+      const { data } = await axios
+        .create({})
+        .post(this.host + "/api/users/signin", {
+          username: this.username,
+          password: this.password,
+        });
       console.log(data);
       this.user = data.user;
       this.token = data.token;
@@ -48,7 +52,7 @@ const app = new Vue({
     },
 
     async getRooms() {
-      const { data } = await this.http.get(this.host + "/api/rooms");
+      const { data } = await this.http.get(this.host + "/api/chat/rooms");
       console.log(data);
       this.rooms = data;
     },
@@ -58,7 +62,7 @@ const app = new Vue({
         return;
       }
 
-      const { data } = await this.http.post(this.host + "/api/rooms", {
+      const { data } = await this.http.post(this.host + "/api/chat/rooms", {
         partnerId: this.partnerId,
       });
       console.log(data);
@@ -77,7 +81,7 @@ const app = new Vue({
 
     async getMessages() {
       const { data } = await this.http.get(
-        `${this.host}/api/rooms/${this.selectedRoomId}/messages`
+        `${this.host}/api/chat/rooms/${this.selectedRoomId}/messages`
       );
       console.log(data);
       this.messages = data;

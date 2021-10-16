@@ -59,7 +59,6 @@ natsWrapper
 
     userUpdatedSubscriber.on("message", async (msg: Message) => {
       const eventData = JSON.parse(msg.getData().toString());
-      // console.log(eventData);
       const { _id, firstName } = eventData;
 
       let user = await userModel.findOne({ referenceId: _id });
