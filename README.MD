@@ -1,22 +1,34 @@
 # I. Local
 
-1. minikube start
-2. create statefulsets
-   cd k8s/local/statefulsets
-   kubectl create -f .
+##
+
+```shell
+minikube start
+```
+
+## create statefulsets
+
+```shell
+cd k8s/local/statefulsets
+kubectl create -f .
+```
 
 # II. Cloud
 
 ## Select project
 
+```shell
 gcloud projects list
 gcloud config set project <project_id>
+```
 
 ## Select context
 
+```shell
 gcloud container clusters get-credentials <cluster_name> --zone asia-southeast1-a
 kubectl config get-contexts
 kubectl config use-context <context_name>
+```
 
 ## Init Project
 
@@ -39,12 +51,16 @@ skaffold dev -f skaffold-dev.yaml
 
 ## Expose loadblancer database service
 
+```shell
 kubectl get pods
 kubectl expose pod chat-mongo-0 --port=27017 --type=LoadBalancer
 kubectl get services
 kubectl describe service chat-mongo-0
+```
 
 ## Delete loadblancer database service
 
+```shell
 kubectl get services
 kubectl delete service chat-mongo-0
+```
