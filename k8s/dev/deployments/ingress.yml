@@ -29,6 +29,13 @@ spec:
     - host: chat.cafe2hdaily.xyz
       http:
         paths:
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: chat
+                port:
+                  number: 4000
           - path: /api/chat/?(.*)
             pathType: Prefix
             backend:

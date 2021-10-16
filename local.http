@@ -1,6 +1,6 @@
 # @host = http://app.local
-# @host = https://chat.cafe2hdaily.xyz
-@host = http://localhost:4000
+@host = https://chat.cafe2hdaily.xyz
+# @host = http://localhost:4000
 @chat_host = http://localhost:4001
 
 ###
@@ -8,8 +8,8 @@ POST {{host}}/api/users/signup
 content-type: application/json
 
 {
-    "username": "user",
-    "password": "user"
+    "username": "admin",
+    "password": "admin"
 }
 
 

@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-mongo
+  labels:
+    app: user-mongo
+spec:
+  ports:
+    - name: user-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    app: user-mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: user-mongo
+spec:
+  selector:
+    matchLabels:
+      app: user-mongo
+  serviceName: "user-mongo"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: user-mongo
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: user-mongo-volume
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: user-mongo-volume
+      spec:
+        storageClassName: mongodb
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
