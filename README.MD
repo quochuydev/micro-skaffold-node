@@ -37,9 +37,14 @@ kubectl create -f .
 skaffold dev -f skaffold-dev.yaml
 ```
 
-## Expose database
+## Expose loadblancer database service
 
 kubectl get pods
 kubectl expose pod chat-mongo-0 --port=27017 --type=LoadBalancer
 kubectl get services
 kubectl describe service chat-mongo-0
+
+## Delete loadblancer database service
+
+kubectl get services
+kubectl delete service chat-mongo-0
