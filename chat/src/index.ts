@@ -72,7 +72,7 @@ natsWrapper
 
       await user.save();
 
-      console.log(user);
+      console.log("nats", user);
 
       msg.ack();
     });

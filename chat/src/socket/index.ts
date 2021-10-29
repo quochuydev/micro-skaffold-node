@@ -35,7 +35,9 @@ export const initSocketIO = (server: any) => {
       const payload: any = jwt.verify(token, process.env.JWT_KEY || "JWT_KEY");
 
       if (payload) {
-        const user = await userModel.findById(payload._id);
+        const user = await userModel.findOne({ referenceId: payload._id });
+        console.log({ payload, user });
+
         if (!user) {
           return next(new Error("Not Authorize"));
         }

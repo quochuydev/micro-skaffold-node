@@ -3,8 +3,9 @@ const app = new Vue({
   data: {
     title: "Chat",
     // host: "http://app.local",
-    host: "https://chat.cafe2hdaily.xyz",
-    // host: "http://localhost:4000",
+    // host: "https://chat.cafe2hdaily.xyz",
+    host: "http://localhost:4000",
+    userHost: "http://localhost:4001",
     username: "admin",
     password: "admin",
     token: "",
@@ -24,7 +25,7 @@ const app = new Vue({
   async beforeMount() {
     const { data } = await axios
       .create({})
-      .get(this.host + "/api/users/getList");
+      .get(this.userHost + "/api/users/getList");
     console.log(data);
     this.users = data;
   },
@@ -33,7 +34,7 @@ const app = new Vue({
     async login() {
       const { data } = await axios
         .create({})
-        .post(this.host + "/api/users/signin", {
+        .post(this.userHost + "/api/users/signin", {
           username: this.username,
           password: this.password,
         });

@@ -1,10 +1,12 @@
 # @host = http://app.local
-@host = https://chat.cafe2hdaily.xyz
+# @host = https://chat.cafe2hdaily.xyz
+
 # @host = http://localhost:4000
-@chat_host = http://localhost:4001
+@chat_host = http://localhost:4000
+@user_host = http://localhost:4001
 
 ###
-POST {{host}}/api/users/signup
+POST {{user_host}}/api/users/signup
 content-type: application/json
 
 {
@@ -15,28 +17,28 @@ content-type: application/json
 
 ###
 # @name signin
-POST {{host}}/api/users/signin
+POST {{user_host}}/api/users/signin
 content-type: application/json
 
 {
-    "username": "user",
-    "password": "user"
+    "username": "admin",
+    "password": "admin"
 }
 
 ###
-GET {{host}}/api/users/current
+GET {{user_host}}/api/users/current
 Authorization: Bearer {{signin.response.body.token}}
 
 ###
-GET {{host}}/api/users/getList
+GET {{user_host}}/api/users/getList
 Authorization: Bearer {{signin.response.body.token}}
 
 ###
-DELETE {{host}}/api/users/{{signin.response.body.user._id}}
+DELETE {{user_host}}/api/users/{{signin.response.body.user._id}}
 Authorization: Bearer {{signin.response.body.token}}
 
 ###
-PUT {{host}}/api/users/{{signin.response.body.user._id}}
+PUT {{user_host}}/api/users/{{signin.response.body.user._id}}
 content-type: application/json
 Authorization: Bearer {{signin.response.body.token}}
 
@@ -47,8 +49,5 @@ Authorization: Bearer {{signin.response.body.token}}
 ###
 # @name rooms
 GET {{chat_host}}/api/chat/rooms
-
-###
-GET {{chat_host}}/api/chat/rooms/{{rooms.response.body[0]._id}}/messages
 
 ###

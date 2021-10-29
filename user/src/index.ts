@@ -56,6 +56,9 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.status(err.status || 400).send(err);
 });
 
-server.listen(4000, () => {
-  console.log("Service is listening on port 4000");
+// TODO
+const port = 4000;
+
+server.listen(port, () => {
+  console.log(`Service is listening on port ${port}`);
 });
