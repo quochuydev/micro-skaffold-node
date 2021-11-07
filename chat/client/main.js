@@ -5,7 +5,7 @@ const app = new Vue({
     // host: "http://app.local",
     // host: "https://chat.cafe2hdaily.xyz",
     host: "http://localhost:4000",
-    userHost: "http://localhost:4001",
+    userHost: "http://localhost:4000",
     username: "admin",
     password: "admin",
     token: "",

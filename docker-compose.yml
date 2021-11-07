@@ -11,6 +11,10 @@ services:
       - /nats-streaming-server
       - -cid
       - unichat
+      - -p
+      - "4222"
+      - -m
+      - "8222"
 
   redis:
     image: "redis:alpine"

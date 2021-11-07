@@ -29,13 +29,6 @@ UserSchema.post("save", function (user, next) {
   next();
 });
 
-UserSchema.post("findOneAndUpdate", function (user, next) {
-  natsWrapper.client.publish("user:updated", JSON.stringify(user), () => {
-    console.log("Event user:updated published");
-  });
-  next();
-});
-
 const User = model("User", UserSchema);
 
 export default User;

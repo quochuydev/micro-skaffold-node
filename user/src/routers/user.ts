@@ -17,26 +17,16 @@ router.get("/api/users/current", middleware, function (req: any, res: any) {
 });
 
 router.put("/api/users/:id", async function (req: any, res: any) {
-  const user = await userModel.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: req.body,
-    },
-    { lean: true, new: true }
-  );
+  const user = await userModel.findOne({ _id: req.params.id });
+  Object.assign(user, req.body);
+  await user.save();
   res.json(user);
 });
 
 router.delete("/api/users/:id", async function (req: any, res: any) {
-  const user = await userModel.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: {
-        deletedAt: new Date(),
-      },
-    },
-    { lean: true, new: true }
-  );
+  const user = await userModel.findOne({ _id: req.params.id });
+  Object.assign(user, { deletedAt: new Date() });
+  await user.save();
   res.json(user);
 });
 

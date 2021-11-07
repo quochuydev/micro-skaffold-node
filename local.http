@@ -1,9 +1,11 @@
-# @host = http://app.local
+@user_host = http://app.local
+@chat_host = http://app.local
+
 # @host = https://chat.cafe2hdaily.xyz
 
 # @host = http://localhost:4000
-@chat_host = http://localhost:4000
-@user_host = http://localhost:4001
+# @chat_host = http://localhost:4000
+# @user_host = http://localhost:4001
 
 ###
 POST {{user_host}}/api/users/signup
